@@ -3,3 +3,7 @@
 **Windows/Mac-freier Installationsweg:** siehe [ANLEITUNG-WINDOWS-IPHONE.md](ANLEITUNG-WINDOWS-IPHONE.md).
 
 Quellprojekt + GitHub Actions macOS-Buildworkflow, der eine *unsignierte* iOS-IPA erstellt. Zur Installation mit kostenloser Apple-ID eignet sich AltStore Classic für Windows. Es ist noch **keine** fertige, getestete iPhone-App.
+
+## Copyright
+
+© 2026 Markus Kern. Alle Rechte vorbehalten.

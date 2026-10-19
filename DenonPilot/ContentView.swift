@@ -323,6 +323,11 @@ private struct SettingsView: View {
                     LabeledContent("Status", value: denon.connectionState.title)
                     Button("Status neu abfragen") { denon.refresh() }.disabled(!denon.connected)
                 }
+                Section("Info") {
+                    Text("© 2026 Markus Kern. Alle Rechte vorbehalten.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
             }
             .navigationTitle("Einstellungen")
             .navigationBarTitleDisplayMode(.inline)
