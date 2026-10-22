@@ -6,6 +6,7 @@ struct ContentView: View {
     @AppStorage("sourceConfig") private var savedSources = ""
     @State private var showSettings = false
     @State private var showMenuPad = false
+    @State private var showSignalStatus = false
     @State private var sources: [DenonSource] = DenonSource.defaults
     @Environment(\.scenePhase) private var scenePhase
 
@@ -18,6 +19,7 @@ struct ContentView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 22) {
                     statusPanel
+                    signalStatusButton
                     powerAndVolume
                     presetPanel
                     audysseyPanel
@@ -43,6 +45,10 @@ struct ContentView: View {
                     Button { showSettings = true } label: { Image(systemName: "gearshape") }
                         .accessibilityLabel("Einstellungen")
                 }
+            }
+            .sheet(isPresented: $showSignalStatus) {
+                SignalStatusView(host: receiverHost, denon: denon)
+                    .presentationDetents([.large])
             }
             .sheet(isPresented: $showMenuPad) {
                 MenuPadView(denon: denon)
@@ -87,6 +93,26 @@ struct ContentView: View {
         }
         .padding(16)
         .background(panel, in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    private var signalStatusButton: some View {
+        Button { showSignalStatus = true } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "waveform.path").font(.title3)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("TON & BILD · SIGNALSTATUS").font(.headline)
+                    Text("Eingang, aktive Lautsprecher und HDMI-Signal")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+            }
+            .frame(maxWidth: .infinity, minHeight: 52)
+            .padding(12)
+            .background(panel, in: RoundedRectangle(cornerRadius: 16))
+        }
+        .disabled(!denon.connected)
+        .accessibilityLabel("Signalstatus für Ton und Bild öffnen")
     }
 
     private var powerAndVolume: some View {

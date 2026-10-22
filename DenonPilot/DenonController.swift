@@ -39,6 +39,8 @@ final class DenonController: ObservableObject {
     @Published private(set) var eq: EQ?
     @Published private(set) var selectedInput: String?
     @Published private(set) var soundMode: String?
+    @Published private(set) var hdrInput: String?
+    @Published private(set) var hdrOutput: String?
     @Published private(set) var lastFeedback: String = ""
 
     var connected: Bool { connectionState == .connected }
@@ -99,6 +101,8 @@ final class DenonController: ObservableObject {
         eq = nil
         selectedInput = nil
         soundMode = nil
+        hdrInput = nil
+        hdrOutput = nil
     }
 
     /// Statusabfrage mit kleinen Abständen, um den Receiver nicht zu überlasten.
@@ -114,6 +118,13 @@ final class DenonController: ObservableObject {
                 }
             }
         }
+    }
+
+    /// Fragt die aktuellen HDR-Kennungen des HDMI-Signals ab.
+    /// Es wird dieselbe bereits bestehende TCP-Verbindung verwendet.
+    func requestVideoSignalStatus() {
+        guard connected else { return }
+        sendRaw("SSINFSIGHDR ?")
     }
 
     enum MenuAction {
@@ -241,6 +252,13 @@ final class DenonController: ObservableObject {
 
     private func handleLine(_ line: String) {
         let upper = line.uppercased()
+        if upper.hasPrefix("SSINFSIGHDR ") {
+            let rest = String(line.dropFirst("SSINFSIGHDR ".count))
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            if rest.hasPrefix("I") { hdrInput = String(rest.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines) }
+            if rest.hasPrefix("O") { hdrOutput = String(rest.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines) }
+            return
+        }
         if upper == "PWON" || upper == "ZMON" { powerOn = true; return }
         if upper == "PWSTANDBY" || upper == "ZMOFF" { powerOn = false; return }
         if upper == "MUON" { muted = true; return }
