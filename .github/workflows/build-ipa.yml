@@ -42,12 +42,12 @@ jobs:
           mkdir -p Payload
           test -d "$RUNNER_TEMP/DenonBuild/Build/Products/Release-iphoneos/DenonPilot.app"
           cp -R "$RUNNER_TEMP/DenonBuild/Build/Products/Release-iphoneos/DenonPilot.app" Payload/
-          /usr/bin/zip -q -r DenonPilot-unsigned-v0.3.ipa Payload
-          test -s DenonPilot-unsigned-v0.3.ipa
+          /usr/bin/zip -q -r DenonPilot-unsigned-v0.4.ipa Payload
+          test -s DenonPilot-unsigned-v0.4.ipa
 
       - name: IPA zum Herunterladen bereitstellen
         uses: actions/upload-artifact@v4
         with:
-          name: DenonPilot-unsigned-iPhone-v0.3
-          path: DenonPilot-unsigned-v0.3.ipa
+          name: DenonPilot-unsigned-iPhone-v0.4
+          path: DenonPilot-unsigned-v0.4.ipa
           retention-days: 7
